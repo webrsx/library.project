@@ -15,7 +15,6 @@
         "symfony/runtime": "5.4.*",
         "symfony/yaml": "5.4.*",
         "sonata-project/admin-bundle": "^4.18",
-        "sonata-project/user-bundle": "^5.3",
         "monolog/monolog": "^3.2"
     },
         "require-dev": {
