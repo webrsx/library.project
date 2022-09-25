@@ -10,7 +10,7 @@ class Book
         private string $name,
         private string $discription,
         private $datePublication,
-        private $bookCoverImg
+        private string $bookCoverImg
     )
     {    }
 }
