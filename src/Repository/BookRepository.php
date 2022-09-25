@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Repository;
-
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -38,6 +37,22 @@ class BookRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function getInfo()
+    {
+        
+    }
+
+    public function getByCountAuthorsAndDatePublished()
+    {
+
+    }
+
+
+
+
+
+
 
 //    /**
 //     * @return Book[] Returns an array of Book objects
