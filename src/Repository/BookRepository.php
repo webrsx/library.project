@@ -20,7 +20,7 @@ class BookRepository extends ServiceEntityRepository
         parent::__construct($registry, Book::class);
     }
 
-    public function save(Book $entity, bool $flush = false): void
+    public function saveBook(Book $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -29,7 +29,7 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Book $entity, bool $flush = false): void
+    public function removeBook(Book $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -38,14 +38,22 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
-    public function getInfo()
+    public function getBook($id, bool $flush = false)
     {
-        
+        $book = $this->find($id);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+
+        return $book;
     }
 
-    public function getByCountAuthorsAndDatePublished()
+    public function getBookByCountAuthorsAndDatePublished(Book $entity, bool $flush = false)
     {
-
+        // do not forget to create after the implementation of the rest of the classes
+        // do not forget to create after the implementation of the rest of the classes
+        // do not forget to create after the implementation of the rest of the classes
     }
 
 

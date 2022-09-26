@@ -29,6 +29,9 @@ class Book
     #[ORM\Column(length: 255)]
     private ?string $bookCoverImg = null;
 
+
+
+    
     public function getId(): ?int
     {
         return $this->id;

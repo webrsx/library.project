@@ -11,57 +11,68 @@ use Doctrine\Persistence\ManagerRegistry;
 
 
 class BookController extends AbstractController
-{
-    // #[Route('/book', name: 'app_book')]
-    // public function index(): Response
-    // {
-    //     return $this->render('book/index.html.twig', [
-    //         'controller_name' => 'BookController',
-    //     ]);
-    // }
-
-     #[Route('/book/createbook', name: 'createBook')]
-
-    public function createBook(ManagerRegistry $doctrine): Response
+{ 
+    public function __construct(
+       private ManagerRegistry $doctrine
+    )
     {
-        $entityManager = $doctrine->getManager();
+        $this->bookRepository = $doctrine->getRepository(Book::class);
+    }
 
+
+    #[Route('/book/createbook', name: 'book_createBook')]
+
+    public function createBook(): Response
+    {
         $book = new Book();
-        $book->setAuthorId(11);
-        $book->setName('knijencuiaEdit');
+        $book->setAuthorId(16);
+        $book->setName('newTest');
         $book->setDiscription('zdes doljno bilo bit opisanie3');
         $book->setDatePublication(new DateTime("2022-09-01"));
         $book->setBookCoverImg("img/testsrc/1234.jpg");
 
-        // сообщите Doctrine, что вы хотите (в итоге) сохранить Продукт (пока без запросов)
-        $entityManager->persist($book);
+        $this->bookRepository->saveBook($book, true);
 
-        // действительно выполните запросы (например, запрос INSERT)
-        $entityManager->flush();
-
-        return new Response('Saved new product with id '. $book->getId());
+        return new Response('Saved new product with id:  '. $book->getId());
     }
 
 
-    #[Route('book/showbook/{id}', name: 'showBook')]
-    public function showBook(int $id = 2): Response
+    #[Route('/book/remove/{id}', name: 'book_removeBook')]
+
+    function removeBook($id)
     {
-        $book = $this->getDoctrine()
-            ->getRepository(Book::class)
-            ->find($id);
+        $book = $this->bookRepository->getBook($id);
+        $this->bookRepository->removeBook($book, true);
 
-        if (!$book) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
-        }
+        return new Response('delete completed');
+    }
 
-        return new Response('Check out this great product: '.$book->getName());
+    
+    #[Route('book/get/{id}', name: 'getBook')]
+
+    public function getBook(int $id = 2): Response
+    {
+        $book = $this->bookRepository->getBook($id, true);
+
+        return new Response('Book name: '.$book->getName(). '. and ID: ' .$book->getID());
 
         // или отобразить шаблон
         // в шаблоне, печатайте все с {{ product.name }}
         // вернет $this->render('product/show.html.twig', ['product' => $product]);
     }
+
+    // #[Route('book/getinfo', name: 'getInfo')]
+    // public function getInfo(ManagerRegistry $doctrine): Response
+    // {
+    //     $repository = $doctrine->getRepository(Book::class);
+    //     $book = new Book();
+    //     $book->setAuthorId(11);
+    //     $book->setName('knijencuiaEdit');
+    //     $book->setDiscription('zdes doljno bilo bit opisanie3');
+    //     $book->setDatePublication(new DateTime("2022-09-01"));
+    //     $book->setBookCoverImg("img/testsrc/1234.jpg");
+    //     return new Response($repository->getInfo($book, true));
+    // }
 
     // #[Route('book/experiment/{id}', name: 'experiment')]
     // public function experiment(int $id, ManagerRegistry $doctrine)
