@@ -49,6 +49,12 @@ class BookRepository extends ServiceEntityRepository
         return $book;
     }
 
+    public function getAllBooks(){
+        $books = $this->findAll();
+        $this->getEntityManager()->flush();
+        return $books;
+    }
+
     public function getBookByCountAuthorsAndDatePublished(Book $entity, bool $flush = false)
     {
         // do not forget to create after the implementation of the rest of the classes

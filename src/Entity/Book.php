@@ -23,8 +23,8 @@ class Book
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $discription = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $datePublication = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $datePublication = null;
 
     #[ORM\Column(length: 255)]
     private ?string $bookCoverImg = null;
@@ -73,12 +73,12 @@ class Book
         return $this;
     }
 
-    public function getDatePublication(): ?\DateTimeInterface
+    public function getDatePublication(): ?string
     {
         return $this->datePublication;
     }
 
-    public function setDatePublication(\DateTimeInterface $datePublication): self
+    public function setDatePublication(string $datePublication): self
     {
         $this->datePublication = $datePublication;
 
