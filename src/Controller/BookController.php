@@ -7,11 +7,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Book;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 
 
@@ -65,24 +60,29 @@ class BookController extends AbstractController
             'name' => $book->getName(),
             'desription' => $book->getDiscription(),
             'datePublication' => $book->getDatePublication(),
-            'bookCoverImg' => $book->getBookCoverImg()     
+            'bookCoverImg' => $book->getBookCoverImg(),
+            'test' => ['1a' => 1,'2' => 2, '3' => 3]   
         ]);
     }
 
     #[Route('/book/getall/', name: 'getAllBooks', methods: ['GET'])]
     public function getAllBooks()
     {
-        header("Access-Control-Allow-Origin: *");
         $books = $this->bookRepository->getAllBooks();
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $booker = null;
-        foreach($books as $book){
-            $booker .= $serializer->serialize($book, 'json');
-        }
+        $booksToJsonResponse = [];
 
-        $response = new Response($booker, 'Access-Control-Allow-Origin: *');   
+        foreach($books as $book){
+                $booksToJsonResponse[] = [
+                    'id' => $book->getid(),
+                    'authorId' => $book->getAuthorId(),
+                    'name' => $book->getName(),
+                    'desription' => $book->getDiscription(),
+                    'datePublication' => $book->getDatePublication(),
+                    'bookCoverImg' => $book->getBookCoverImg()
+                ];
+        }
+        
+        return new JsonResponse($booksToJsonResponse);
 
     }
 
