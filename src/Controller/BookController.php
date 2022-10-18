@@ -4,32 +4,32 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Book;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\BookRepository;
+use App\Entity\Book;
+use OpenApi\Annotations\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 
 
 class BookController extends AbstractController
 { 
     public function __construct(
-       private ManagerRegistry $doctrine
+        private BookRepository $bookRepository
     )
-    {
-        $this->bookRepository = $doctrine->getRepository(Book::class);
-    }
+    {}
 
 
-    #[Route('/book/createbook', name: 'book_createBook')]
+    #[Route('/book/createbook', name: 'book_createBook', methods: ['POST'])]
 
-    public function createBook(): JsonResponse
+    public function createBook(Request $request)
     {
         $book = new Book();
-        $book->setAuthorId(16);
-        $book->setName('newTest');
-        $book->setDiscription('zdes doljno bilo bit opisanie3');
-        $book->setDatePublication("2022-09-01");
-        $book->setBookCoverImg("img/testsrc/1234.jpg");
+        $book->setAuthorId($request->request->get('authorId'));
+        $book->setName($request->request->get('name'));
+        $book->setDiscription($request->request->get('description'));
+        $book->setDatePublication($request->request->get('datePublication'));
+        $book->setBookCoverImg($request->request->get('bookCoverImg'));
 
         $this->bookRepository->saveBook($book, true);
 
@@ -37,7 +37,7 @@ class BookController extends AbstractController
     }
 
 
-    #[Route('/book/remove/{id}', name: 'book_removeBook')]
+    #[Route('/book/remove/{id}', name: 'book_removeBook', methods: ['DELETE'])]
 
     function removeBook($id)
     {
@@ -60,8 +60,7 @@ class BookController extends AbstractController
             'name' => $book->getName(),
             'desription' => $book->getDiscription(),
             'datePublication' => $book->getDatePublication(),
-            'bookCoverImg' => $book->getBookCoverImg(),
-            'test' => ['1a' => 1,'2' => 2, '3' => 3]   
+            'bookCoverImg' => $book->getBookCoverImg()  
         ]);
     }
 
