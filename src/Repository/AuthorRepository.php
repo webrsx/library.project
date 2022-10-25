@@ -53,10 +53,21 @@ class AuthorRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
 
         $query = $entityManager->createQuery(
-            'SELECT a
-            FROM App\Entity\Author a
-            WHERE a.countPublishedBooks = :countPublishedBooks'
-        )->setParameter('countPublishedBooks', $countPublishedBooks);
+            'SELECT a FROM App\Entity\Author a WHERE a.countPublishedBooks = :countPublishedBooks')
+            ->setParameter('countPublishedBooks', (int) $countPublishedBooks);
+
+        // возвращает массив объектов
+        return $query->getResult();
+    }
+
+    public function getAuthorsWhereMoreThanOneBook(){
+
+
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT a FROM App\Entity\Author a WHERE a.countPublishedBooks > :countPublishedBooks')
+            ->setParameter('countPublishedBooks', 0);
 
         // возвращает массив объектов
         return $query->getResult();
